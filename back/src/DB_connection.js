@@ -1,9 +1,28 @@
-require ('dontev').config();
-import { Config } from 'dotenv';
-const { sequelize } = require ("sequelize");
-const { DB_USER, DB_PASSWORD, DB_HOST} = process.env;
+require('dotenv').config();
+const { Sequelize } = require('sequelize');
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_DEPLOY } = process.env;
+const FavoriteModel = require('./models/Favorite')
+const UserModel = require('./models/User')
 
+ const sequelize = new Sequelize(
+    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/rickandmorty`,
+   { logging: false, native: false } );
 
-const sequelize= new sequelize (`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/rickandmorty`,
-   { logging: false, native: false }
- ); 
+//const sequelize = new Sequelize(
+  // DB_DEPLOY,
+ //  { logging: false, native: false, dialectModule: require('pg') }
+//);
+
+FavoriteModel(sequelize);
+//
+UserModel(sequelize);
+
+const { User, Favorite } = sequelize.models;
+User.belongsToMany(Favorite, {through: 'user_favorite'});
+Favorite.belongsToMany(User, {through: 'user_favorite'});
+
+module.exports = {
+   User,
+   Favorite,
+   conn: sequelize,
+};

@@ -1,4 +1,4 @@
-const { Favorite } = require ()
+const { Favorite } = require ("../DB_connection")
 
 const deletFav = async (req, res) =>{
     try{
@@ -13,5 +13,5 @@ const deletFav = async (req, res) =>{
     }
 }
 
-Module.Exports = { deletFav }
+module.Exports = { deletFav }
 
