@@ -1,32 +1,35 @@
-import style from './Cards.module.css'
 import Card from "../Card/Card";
-import MenuBurger from '../MenuBurger/MenuBurger';
-import portalRick from '../Images/portalRick.jpg'
 
+const Cards = ({ characters, onClose }) => {
+   const cardsContainer ={
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "space-evenly"
+   }
+   return (
+      <div style={cardsContainer}>
+         {
+            !characters.length
+               ? <h2>Por favor ingrese un id...</h2>
+               :
+            characters.map(character => (
+               <Card
+                  key={character.id}
+                  id={character.id}
+                  name={character.name}
+                  status={character.status}
+                  species={character.species}
+                  gender={character.gender}
+                  origin={character.origin.name}
+                  image={character.image}
+                  onClose={onClose}
+               />
+            ))
+         }
+      </div>
 
-export default function Cards({ menuBurger, handleMenuBurger, characters, onClose }) {
+   );
 
-    return (<div className={style.container}>
-       <img className={style.video} src={portalRick} alt="" />
-       {menuBurger ? <MenuBurger menuBurger={menuBurger} handleMenuBurger={handleMenuBurger}></MenuBurger> : null}
-       <div className={style.cardsContainer}>
-          {!menuBurger ? characters.map(({ id, name, status, species, gender, origin, image }) => {
-             return (
-                <div className={style.card} key={id}>
-                   <Card
-                      key={id}
-                      id={id}
-                      name={name}
-                      status={status}
-                      species={species}
-                      gender={gender}
-                      origin={origin.name}
-                      image={image}
-                      onClose={onClose}
-                   />
-                </div>
-             )
-          }) : null}
-       </div>
-    </div>);
- }
+};
+
+export default Cards; 

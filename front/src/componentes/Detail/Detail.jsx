@@ -1,55 +1,41 @@
-import axios from "axios"
-import { useState,useEffect } from "react";
-import { useParams } from "react-router-dom";
-//import MenuBurger from "../MenuBurger/MenuBurger";
-//import portalRick from '../Images/portalRick.jpg'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; 
+import axios from "axios";
 
+const URL = "https://rym2.up.railway.app/api/character";
+const API_KEY = "faigtherpinilla";
 
-
-
-const Detail = ({ handleMenuBurger, menuBurger }) => {
-    const { id } = useParams();
-    const [ characters , setcharacter  ] = useState ({});
-    useEffect (() =>{
-        axios (`/rickandmorty/character/${id}`)
-        .then(({ data }) => {
-            if ( data.name ) {
-             setcharacter(data);
-            } else {
-                window.alert ("No characters with that ID")
+const Detail = (props) => {
+    const { id } = useParams ();
+    const [ character, setCharacter ] = useState ({});
+    useEffect (() => {
+        axios(`${URL}/${id}?key=${API_KEY}`)
+       // axios(`http://localhost:3001/rickandmorty/character/${id}`)
+        .then(
+            ({ data }) => {
+                if (data.name) {
+                    console.log(data);
+                    setCharacter(data);
+                 } else {
+                    window.alert('No hay personajes con ese ID');
+                 } 
             }
-        });
-        return setcharacter({});
-    }, [id]);
-    
+        );
+            return setCharacter({});
+    }, [id])
     return (
-        <div className={Style.container}>
-            {menuBurger? <MenuBurger handleMenuBurger={handleMenuBurger}></MenuBurger> : null}
-        <div>
-            <img src={portalRick} className={style.video} alt=""/>
-            {!menuBurger? <div className={style.newContainer}>
-               <div className={style.left}>
-                  <div className={style.cardContainer}>
-                  <img className={style.image} src={characters?.image} alt={characters?.name} />
-                  <h2 className={style.name}>{characters?.name}</h2>
-                  </div>
-               </div>
-               <div className={style.right}>
-                  <div className={style.detailContainer}>
-                     <label htmlFor="">Status: </label>
-                  <h3>{characters?.status}</h3>
-                  <label htmlFor="">Gender: </label>
-                  <h3>{characters?.gender}</h3>
-                  <label htmlFor="">Specie: </label>
-                  <h3>{characters?.species}</h3>
-                  <label htmlFor="">Origin: </label>
-                  <h3>{characters?.origin?.name}</h3>
-                  </div>
-               </div>
-            </div> : null}
-        </div>
-       
-       </div>
-    )
-}
-    export default Detail;
+        <div style={{backgroundColor:"darkslategray", padding: "20px", borderRadius:"20px"}} >
+        <h1>Detail</h1>
+        <h2>{character.name}</h2>
+        <img src={character.image} alt={character.name} />
+        <h3>Status: {character.status}</h3>
+        <h3>Specie: {character.species}</h3>
+        <h3>Gender: {character.gender}</h3>
+        <h3>Origin: {character.origin?.name}</h3>
+        <h3>Location: {character.location?.name}</h3>
+     </div>
+
+    );
+};
+
+export default Detail;
